@@ -1,0 +1,26 @@
+{
+	"name": "coviu/Api",
+    "description": "A simple library to use the Coviu API.",
+    "homepage": "https://github.com/coviu/coviu-php-sdk",
+    "authors": [
+        {
+            "name": "Silvia Pfeiffer",
+            "email": "silvia@coviu.com"
+        },
+        {
+            "name": "Briely Marum",
+            "email": "briely@coviu.com"
+        }
+    ],
+    "license": "MIT",
+    "require": {
+        "php": ">=5.3.0",
+		"rmccue/requests": "^1.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "coviu\\Api\\": "src"
+        }
+    },
+    "minimum-stability": "dev"
+}
