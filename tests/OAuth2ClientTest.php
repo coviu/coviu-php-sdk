@@ -10,7 +10,7 @@ class OAuth2ClientTest extends PHPUnit_Framework_TestCase
   private static $api_key = '7a552998-0da1-4dcf-b15d-824c0c93c788';
   private static $key_secret = '769a75fb2bb4e0b09cde';
 
-  public function testGetGetAnAccessToken()
+  public function testCanGetAccessToken()
   {
     $client = new OAuth2Client(self::$api_key, self::$key_secret, Request::request(self::$endpoint));
     $res = $client->getAccessToken()->run();
@@ -19,7 +19,7 @@ class OAuth2ClientTest extends PHPUnit_Framework_TestCase
     $this->assertTrue(isset($res['body']['expires_in']));
   }
 
-  public function testGetGetAnAccessToken()
+  public function testCanRefreshAccessToken()
   {
     $client = new OAuth2Client(self::$api_key, self::$key_secret, Request::request(self::$endpoint));
     $res = $client->getAccessToken()->run();
