@@ -91,4 +91,20 @@ class OAuth2Client
 
       return $response;
     }
+
+
+    public function getApiKey()
+    {
+      return $this->api_key;
+    }
+
+    public function getKeySecret()
+    {
+      return $this->api_key_secret;
+    }
+
+    public function getEndpoint()
+    {
+      return $this->token_endpoint;
+    }
 }
