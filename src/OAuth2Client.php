@@ -25,86 +25,36 @@ use rmccue\requests;
 
 class OAuth2Client
 {
+  /** @var string */
+  private $api_key;
 
-    /** @var string */
-    private $api_key;
+  /** @var string */
+  private $api_key_secret;
 
-    /** @var string */
-    private $api_key_secret;
+  /** @var Request */
+  private $base;
 
-    /** @var string */
-    private $token_endpoint;
+  public function __construct($api_key, $api_key_secret, $base)
+  {
+      $this->api_key = $api_key;
+      $this->api_key_secret = $api_key_secret;
+      $that = $this;
+      $auth = function() use (&$that) {return $that->basicAuth();};
+      $this->base = $base->path('/auth/token')->form()->post()->auth($auth);
+  }
 
-    public function __construct($api_key, $api_key_secret, $token_endpoint)
-    {
-        $this->api_key = $api_key;
-        $this->api_key_secret = $api_key_secret;
-        $this->token_endpoint = $token_endpoint;
-    }
+  public function getAccessToken()
+  {
+    return $this->base->body(['grant_type' => 'client_credentials']);
+  }
 
-    public function getAccessToken()
-    {
-      $data = array('grant_type' => 'client_credentials');
+  public function refreshAccessToken( $refresh_token )
+  {
+    return $this->base->body(['grant_type' => 'refresh_token', 'refresh_token' => $refresh_token]);
+  }
 
-      // Use the api_key and api_key_secret to get an access token and refresh token for the api client.
-      $response = self::sendPostRequest( $data );
-
-      return json_decode($response->body);
-    }
-
-    public function refreshAccessToken( $refresh_token )
-    {
-      $data = array('grant_type' => 'refresh_token', 'refresh_token' => $refresh_token);
-
-      // Use the api_key and api_key_secret along with a previous refresh token to refresh an
-      // access token, returning a new grant with access token and refresh token.
-      $response = self::sendPostRequest( $data );
-
-      return json_decode($response->body);
-    }
-
-    /**
-     * Create a Basic Authorization header using the api key & secret
-     *
-     * @return array
-     */
-    private function buildAuthHeader()
-    {
-      // Construct the HTTP Basic Auth header.
-      return ( array('Authorization' => 'Basic '.base64_encode($this->api_key.':'.$this->api_key_secret)) );
-    }
-
-    /**
-     * Send a HTTP post request and retrieve the response
-     *
-     * @param array      $data       Array of HTTP headers
-     *
-     * @return array
-     */
-    private function sendPostRequest( $data )
-    {
-      $auth_header = self::buildAuthHeader();
-      $header = array();
-      $header = array_merge( $header, $auth_header );
-
-      $response = \Requests::post( $this->token_endpoint, $header, $data );
-
-      return $response;
-    }
-
-
-    public function getApiKey()
-    {
-      return $this->api_key;
-    }
-
-    public function getKeySecret()
-    {
-      return $this->api_key_secret;
-    }
-
-    public function getEndpoint()
-    {
-      return $this->token_endpoint;
-    }
+  private function basicAuth()
+  {
+    return 'Basic '.base64_encode($this->api_key.':'.$this->api_key_secret);
+  }
 }
