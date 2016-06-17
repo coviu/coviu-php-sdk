@@ -176,7 +176,7 @@ class Request {
     return $this->method('DELETE');
   }
 
-  // Set the path, of the request. Not that $host may have static
+  // Set the path, of the request. Note that $host may have static
   // path components and the final URL is $host.$path, e.g
   // $host = 'https://api.coviu.com/v1';
   // $path = '/session';

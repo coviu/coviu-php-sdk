@@ -21,8 +21,6 @@ namespace coviu\Api;
 
 require_once('vendor/autoload.php');
 
-use rmccue\requests;
-
 class OAuth2Client
 {
   /** @var string */
