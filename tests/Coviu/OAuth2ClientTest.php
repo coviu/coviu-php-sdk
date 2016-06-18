@@ -6,9 +6,9 @@ use PHPUnit_Framework_TestCase;
 
 class OAuth2ClientTest extends PHPUnit_Framework_TestCase
 {
-  private static $endpoint = 'https://api-staging.covi.io/v1';
-  private static $api_key = '7a552998-0da1-4dcf-b15d-824c0c93c788';
-  private static $key_secret = '769a75fb2bb4e0b09cde';
+  private static $endpoint = 'http://localhost:9400/v1';
+  private static $api_key = '8de85310-7c43-4606-a450-43a348398a4b';
+  private static $key_secret = 'abcdefg';
 
   public function testCanGetAccessToken()
   {

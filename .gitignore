@@ -1,3 +1,4 @@
 composer.lock
 help.txt
 vendor/
+tests/logs/

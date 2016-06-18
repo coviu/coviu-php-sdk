@@ -6,7 +6,7 @@ use PHPUnit_Framework_TestCase;
 
 class RequestTest extends PHPUnit_Framework_TestCase
 {
-  private static $endpoint = 'https://api.coviu.com/v1';
+  private static $endpoint = 'http://localhost:9400/v1';
 
   // We can construct a request a request and it is initialised to
   // an empty get request to the supplied endpoint.

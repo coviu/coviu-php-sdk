@@ -54,9 +54,9 @@ class MockOAuth2Client
 
 class AuthenticatorTest extends PHPUnit_Framework_TestCase
 {
-  private static $endpoint = 'https://api-staging.covi.io/v1';
-  private static $api_key = '7a552998-0da1-4dcf-b15d-824c0c93c788';
-  private static $key_secret = '769a75fb2bb4e0b09cde';
+  private static $endpoint = 'http://localhost:9400/v1';
+  private static $api_key = '8de85310-7c43-4606-a450-43a348398a4b';
+  private static $key_secret = 'abcdefg';
 
   public function testWillRequestAccessToken()
   {
@@ -138,10 +138,27 @@ class AuthenticatorTest extends PHPUnit_Framework_TestCase
   public function testCanMakeRequest()
   {
     $request = Request::request(self::$endpoint);
-    $client = new OAuth2Client(self::$api_key, self::$key_secret, $request);
+    $keys = self::build_session_client();
+    $client = new OAuth2Client($keys['clientId'], $keys['secret'], $request);
     $authenticator = new Authenticator($client);
     $sessionRequest = $request->auth($authenticator)->get()->path('/sessions');
     $result = $sessionRequest->run();
     $this->assertTrue($result['ok']);
+  }
+
+  // TODO: Remove the duplication with SdkTest.
+  public static function build_session_client()
+  {
+    $req = Request::request(self::$endpoint);
+    $client = new OAuth2Client(self::$api_key, self::$key_secret, $req);
+    $authenticator = new Authenticator($client);
+    $post = $req->auth($authenticator)->post()->json();
+    // Create a user
+    $user = $post->path('/users')->body(Examples::user())->run()['body'];
+    // Create a team.
+    $team = $post->path('/users/'.$user['userId'].'/teams')->body(Examples::team())->run()['body'];
+    // Create an api client for that team owned by that user.
+    $client = $post->path('/system/clients')->body(Examples::client($user['userId'], $team['teamId']))->run()['body'];
+    return $client;
   }
 }
