@@ -13,5 +13,6 @@ class HttpException extends \Exception
       $msg = $msg.'\n'.$response['body']['error']['message'];
     }
     parent::__construct($msg);
+    $this->response = $response;
   }
 }

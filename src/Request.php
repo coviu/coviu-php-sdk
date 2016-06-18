@@ -36,7 +36,7 @@ function build_headers($render)
 function build_url($render)
 {
   $query = '';
-  if (array_key_exists('QUERY', $render))
+  if (array_key_exists('QUERY', $render) && count($render['QUERY']) > 0)
   {
     $query = '?'.http_build_query($render['QUERY']);
   }

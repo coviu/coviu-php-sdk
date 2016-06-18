@@ -13,7 +13,7 @@
 >
   <testsuites>
     <testsuite name="Coviu-php-sdk Test Suite">
-      <directory>./tests/</directory>
+      <directory>./tests/Coviu</directory>
     </testsuite>
   </testsuites>
 

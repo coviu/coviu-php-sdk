@@ -28,7 +28,7 @@ class SessionApi
     return $this->get->path('/sessions/')->subpath($sessionId);
   }
 
-  public function getSessions($query)
+  public function getSessions($query = [])
   {
     return $this->get->path('/sessions')->query($query);
   }
@@ -45,7 +45,7 @@ class SessionApi
 
   public function getSessionParticipants($sessionId)
   {
-    return $This->get->path('/sessions/')->subpath($sessionId)->subpath('/participants');
+    return $this->get->path('/sessions/')->subpath($sessionId)->subpath('/participants');
   }
 
   public function addParticipant ($sessionId, $participant)
