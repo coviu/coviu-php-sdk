@@ -38,6 +38,11 @@ clyde:
   volumes:
     - ./logs/:/var/log/coviu/
 
+echo-server:
+  image: docker.covi.io/coviu/echo-server:0.1.0-4-gfa1ba96
+  ports:
+    - "5000:5000"
+
 api-gateway:
   image: docker.covi.io/coviu/api-gateway:0.1.0-18-g9bbe682
   ports:
