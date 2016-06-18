@@ -37,7 +37,7 @@ class RunDecorator
   }
 }
 
-// The ThrowDecorator turns failed http requests into exeptions. This behaviour can be turned off, but
+// The ThrowDecorator turns failed http requests into exceptions. This behaviour can be turned off, but
 // is probably the most convenient api to expose.
 class ThrowDecorator
 {
