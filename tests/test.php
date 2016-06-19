@@ -1,16 +1,9 @@
 <?php 
 
 require_once __DIR__ . '/../vendor/autoload.php'; // Autoload files using Composer autoload
+require_once __DIR__ . '/../src/Coviu.php';
 
-use rmccue\requests;
-
-use coviu\Api\OAuth2Client;
-
-
-$endpoint = getenv('COVIU_API_ENDPOINT');
-if (!$endpoint) {
-  $endpoint = 'https://api.coviu.com/v1';
-}
+use coviu\Api\Coviu;
 
 $api_key = getenv('API_KEY');
 if (!$api_key) {
@@ -18,23 +11,45 @@ if (!$api_key) {
   exit();
 }
 
-$api_key_secret = getenv('KEY_SECRET');
-if (!$api_key_secret) {
+$key_secret = getenv('KEY_SECRET');
+if (!$key_secret) {
   echo("Set KEY_SECRET environment variable.");
   exit();
 }
 
-$token_endpoint = $endpoint.'/auth/token';
-
-$client = new OAuth2Client($api_key, $api_key_secret, $token_endpoint);
-
-// Recover an access token
-$grant = $client->getAccessToken();
-
-var_dump($grant);
+// initiate the API
+$coviu = new Coviu($api_key, $key_secret);
 
 
-// Refresh an access token before grant->expires_in has expired.
-$grant = $client->refreshAccessToken( $grant->refresh_token);
+// schedule a session
+date_default_timezone_set('GMT');
 
-var_dump($grant);
+$session = array(
+  'session_name' => 'A test session with Dr. Who',
+  'start_time' => (new \DateTime())->format(\DateTime::ATOM),
+  'end_time' => (new \DateTime())->modify('+1 hour')->format(\DateTime::ATOM),
+  'picture' => 'http://www.fillmurray.com/200/300'
+);
+
+$session = $coviu->sessions->createSession($session);
+var_dump($session);
+
+// add participant to session
+$host = array(
+  'display_name' => 'Dr. Who',
+  'role' => 'host', // or 'guest'
+  'picture' => 'http://fillmurray.com/200/300',
+  'state' => 'test-state'
+);
+
+$participant = $coviu->sessions->addParticipant($session['session_id'], $host);
+var_dump($participant);
+
+
+// get sessions
+$sessions = $coviu->sessions->getSessions();
+
+var_dump($sessions);
+var_dump($coviu->sessions->getSession($session['session_id']));
+
+

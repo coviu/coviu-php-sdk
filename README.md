@@ -23,115 +23,152 @@ composer require coviu/Api
 ```
 
 
-
-TODO: UPDATE below here
-
 ### Quickstart
 
 Setup the sdk by passing in your api key and key secret
 
-```javascript
-var sdk = require('coviu-js-sdk');
+```php
+use coviu\Api\Coviu;
 
-var apiKey = 'my_api_key_from_coviu.com';
-var keySecret = 'my_api_key_secret';
+$api_key = 'my_api_key_from_coviu.com';
+$api_key_secret = 'my_api_key_secret';
 
-var coviu = sdk(apiKey, keySecret);
+$coviu = new Coviu('api_key', 'key_secret');
 ```
 
 Schedule a session for the future.
 
-```javascript
+```php
+date_default_timezone_set('GMT');
 
-var session =  {
-  session_name: "A test session with Dr. Who",
-  start_time: 'Wed, 08 Jun 2016 13:34:00 GMT',
-  end_time: 'Wed, 08 Jun 2016 13:44:00 GMT',
-  picture: 'http://www.fillmurray.com/200/300',
-  participants: []
-};
+$session = array(
+  'session_name' => 'A test session with Dr. Who',
+  'start_time' => (new \DateTime())->format(\DateTime::ATOM),
+  'end_time' => (new \DateTime())->modify('+1 hour')->format(\DateTime::ATOM),
+  'picture' => 'http://www.fillmurray.com/200/300'
+);
 
-coviu.sessions.createSession(session).run().then(console.log);
+$session = $coviu->sessions->createSession($session);
+var_dump($session);
+
 ```
 
 Example output
-```javascript
-{
-  team_id: '936c863f-ccff-4775-9011-cd17f4b5ad75',
-  client_id: '07c0fdbd-9089-4943-aa0b-2b01754f42e7',
-  participants: [],
-  session_id: '09ef6778-3714-4dd6-91ec-d2868365c4ef',
-  session_name: 'A test session with Dr. Who',
-  start_time: 'Wed, 08 Jun 2016 13:34:00 GMT',
-  end_time: 'Wed, 08 Jun 2016 13:44:00 GMT',
-  picture: 'http://www.fillmurray.com/200/300'
+```php
+array(8) {
+  ["team_id"]=>
+  string(36) "bc5f47f1-f990-4d4d-a332-d3aa27ce6b76"
+  ["client_id"]=>
+  string(36) "440ee0f6-f99a-4515-ad15-da67dc29b0fc"
+  ["participants"]=>
+  array(0) {
+  }
+  ["session_id"]=>
+  string(36) "6a157415-55cd-45a4-a82f-cd78b52e67b3"
+  ["session_name"]=>
+  string(27) "A test session with Dr. Who"
+  ["start_time"]=>
+  string(24) "2016-06-18T12:37:59.000Z"
+  ["end_time"]=>
+  string(24) "2016-06-18T13:37:59.000Z"
+  ["picture"]=>
+  string(33) "http://www.fillmurray.com/200/300"
 }
 ```
 
-`coviu.sessions.*` is a collection of functions that build requests that can be run against the api. In order to run the
-request, the `.run()` method must be called, which returns a promise of the result.
+`$coviu->sessions->*` is a collection of functions that build requests that can be run against the api.
 
-It's important to notice that the string format for start_time and end_time is RFC-1123, which specifies the UTC timezone.
 
 You can now add a participant to the session
 
-```javascript
-var host = {
-  display_name: "Dr. Who",
-  role: "host", // or "guest"
-  picture: "http://fillmurray.com/200/300",
-  state: "test-state"
-};
-var sessionId = '09ef6778-3714-4dd6-91ec-d2868365c4ef';
-api.sessions.addParticipant(sessionId, host).run().then(console.log);
+```php
+$host = array(
+  'display_name' => 'Dr. Who',
+  'role' => 'host', // or 'guest'
+  'picture' => 'http://fillmurray.com/200/300',
+  'state' => 'test-state'
+);
+
+$participant = $coviu->sessions->addParticipant($session['session_id'], $host);
+var_dump($participant);
 ```
 
 Example output
-```javascript
-{
-  client_id: '07c0fdbd-9089-4943-aa0b-2b01754f42e7',
-  display_name: 'Dr. Who',
-  entry_url: 'https://coviu.com/session/e3c40e88-2b19-49bd-b687-1c08e4e0e124',
-  participant_id: 'e3c40e88-2b19-49bd-b687-1c08e4e0e124',
-  picture: 'http://fillmurray.com/200/300',
-  role: 'HOST',
-  session_id: '09ef6778-3714-4dd6-91ec-d2868365c4ef',
-  state: 'test-state'
+```php
+array(8) {
+  ["client_id"]=>
+  string(36) "440ee0f6-f99a-4515-ad15-da67dc29b0fc"
+  ["display_name"]=>
+  string(7) "Dr. Who"
+  ["entry_url"]=>
+  string(62) "https://coviu.com/session/af1f3606-dfbf-4728-b3ca-8f099ca9024a"
+  ["participant_id"]=>
+  string(36) "af1f3606-dfbf-4728-b3ca-8f099ca9024a"
+  ["picture"]=>
+  string(29) "http://fillmurray.com/200/300"
+  ["role"]=>
+  string(4) "HOST"
+  ["session_id"]=>
+  string(36) "6de7f062-f6db-4253-93b3-8f45445ce2d9"
+  ["state"]=>
+  string(10) "test-state"
 }
 ```
 
-Notice the `entry_url` for the newly created participant. Following this url in a browser or in one of the coviu mobile
+Notice the `entry_url` for the newly created participant. Following this url in a browser or in one of the coviu mobile apps
 between `start_time` and `end_time` (while the session is active), will join the participant into the session, assuming
 the role and identity provided.
 
 
 We can now read the entire session structure back
-```javascript
-api.sessions.getSession('09ef6778-3714-4dd6-91ec-d2868365c4ef').run().then(console.log).catch(console.error);
+```php
+$sessions = $coviu->sessions->getSessions();
+
+var_dump($sessions);
+
+var_dump($coviu->$sessions->getSession($session['session_id']));
 ```
 
 Example output
-```javascript
-{
-  team_id: '936c863f-ccff-4775-9011-cd17f4b5ad75',
-  client_id: '07c0fdbd-9089-4943-aa0b-2b01754f42e7',
-  session_id: '09ef6778-3714-4dd6-91ec-d2868365c4ef',
-  session_name: 'A test session with Dr. Who',
-  start_time: 'Wed, 08 Jun 2016 13:35:44 GMT',
-  end_time: 'Wed, 08 Jun 2016 13:45:44 GMT',
-  picture: 'http://www.fillmurray.com/200/300',
-  participants:[{
-    client_id: '07c0fdbd-9089-4943-aa0b-2b01754f42e7',
-    display_name: 'Dr. Who',
-    entry_url: 'https://coviu.com/session/e3c40e88-2b19-49bd-b687-1c08e4e0e124',
-    participant_id: 'e3c40e88-2b19-49bd-b687-1c08e4e0e124',
-    picture: 'http://fillmurray.com/200/300',
-    role: 'HOST',
-    session_id: '09ef6778-3714-4dd6-91ec-d2868365c4ef',
-    state: 'test-state'
-  }]
+```php
+array(8) {
+  ["team_id"]=>
+  string(36) "bc5f47f1-f990-4d4d-a332-d3aa27ce6b76"
+  ["client_id"]=>
+  string(36) "440ee0f6-f99a-4515-ad15-da67dc29b0fc"
+  ["participants"]=>
+  array(1) {
+    [0]=>
+    array(8) {
+      ["client_id"]=>
+      string(36) "440ee0f6-f99a-4515-ad15-da67dc29b0fc"
+      ["display_name"]=>
+      string(7) "Dr. Who"
+      ["entry_url"]=>
+      string(62) "https://coviu.com/session/15142b66-7e26-4c49-a232-bc4aa1126aff"
+      ["participant_id"]=>
+      string(36) "15142b66-7e26-4c49-a232-bc4aa1126aff"
+      ["picture"]=>
+      string(29) "http://fillmurray.com/200/300"
+      ["role"]=>
+      string(4) "HOST"
+      ["session_id"]=>
+      string(36) "7ec15ff3-87f9-4ec9-9484-6029d5da56a6"
+      ["state"]=>
+      string(10) "test-state"
+    }
+  }
+  ["session_id"]=>
+  string(36) "7ec15ff3-87f9-4ec9-9484-6029d5da56a6"
+  ["session_name"]=>
+  string(27) "A test session with Dr. Who"
+  ["start_time"]=>
+  string(24) "2016-06-19T09:32:26.000Z"
+  ["end_time"]=>
+  string(24) "2016-06-19T10:32:26.000Z"
+  ["picture"]=>
+  string(33) "http://www.fillmurray.com/200/300"
 }
 ```
 
-There's a full set of api documents provided with api source for the `coviu-sdk-api` npm module at
-https://github.com/coviu/coviu-sdk-api/blob/master/libs/sessions.js
+There's a full set of api documents provided with api source for the `coviu-sdk-api` npm module at /src/SessionApi.php
