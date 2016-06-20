@@ -1,5 +1,5 @@
 {
-    "name": "coviu/coviu-php-sdk",
+    "name": "coviu/coviu-sdk",
     "description": "A simple library to use the Coviu API.",
     "homepage": "https://github.com/coviu/coviu-php-sdk",
     "authors": [
