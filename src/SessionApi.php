@@ -53,7 +53,9 @@ class SessionApi
    *    "page": optional number,
    *    "page_size": optional number,
    *    "start_time": optional utc date string,
-   *    "end_time": optional utc date string
+   *    "end_time": optional utc date string,
+   *    "include_canceled": optional boolean indicating if you want to also
+   *                        include previously canceled sessions in the result.
    *  }
    */
   public function getSessions($query = [])
