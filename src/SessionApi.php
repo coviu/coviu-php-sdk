@@ -80,7 +80,7 @@ class SessionApi
    * Cancel a session
    * @param: sessionId - string
    */
-  public function deleteSession($sessionId)
+  public function cancelSession($sessionId)
   {
     return $this->del->path('/sessions/')->subpath($sessionId);
   }

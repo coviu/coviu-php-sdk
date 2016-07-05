@@ -138,7 +138,7 @@ class SdkTest extends PHPUnit_Framework_TestCase
   public function testCanCancelASession()
   {
     $session = $this->coviu->sessions->createSession(Examples::session());
-    $removed = $this->coviu->sessions->deleteSession($session['session_id']);
+    $removed = $this->coviu->sessions->cancelSession($session['session_id']);
     $this->assertTrue($removed['ok']);
     try {
       $this->coviu->sessions->getSession($session['session_id']);
