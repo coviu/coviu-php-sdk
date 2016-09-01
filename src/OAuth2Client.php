@@ -19,8 +19,6 @@
 
 namespace coviu\Api;
 
-require_once('vendor/autoload.php');
-
 class OAuth2Client
 {
   /** @var string */

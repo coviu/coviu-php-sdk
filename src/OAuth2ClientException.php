@@ -2,8 +2,6 @@
 
 namespace coviu\Api;
 
-require_once('vendor/autoload.php');
-
 class OAuth2ClientException extends \Exception
 {
   public $response;

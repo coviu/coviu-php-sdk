@@ -1,7 +1,6 @@
 <?php
 namespace coviu\Api;
 
-require_once('vendor/autoload.php');
 /*
  Authenticator adds the OAuth2 authentication behaviour to a coviu\Api\Request.
  */
