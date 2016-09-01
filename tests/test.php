@@ -45,6 +45,15 @@ $host = array(
 $participant = $coviu->sessions->addParticipant($session['session_id'], $host);
 var_dump($participant);
 
+// add participant to session
+$guest = array(
+  'display_name' => 'Patient of Dr. Who',
+  'role' => 'guest',
+  'picture' => 'http://fillmurray.com/200/400'
+);
+$participant = $coviu->sessions->addParticipant($session['session_id'], $guest);
+var_dump($participant);
+
 
 // get sessions
 $sessions = $coviu->sessions->getSessions();
