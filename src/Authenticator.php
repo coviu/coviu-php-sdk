@@ -6,17 +6,24 @@ namespace coviu\Api;
  */
 class Authenticator {
 
-  private $access_token;
-  private $refresh_token;
-  private $next_refresh;
-  private $client;
+  public $access_token;
+  public $refresh_token;
+  public $next_refresh;
+  public $client;
   private $clock_func;
 
-  public function __construct($client)
+  public function __construct($client, $grant = NULL)
   {
-    $this->access_token = NULL;
-    $this->refresh_token = NULL;
-    $this->next_refresh = NULL;
+    if (is_null($grant))
+    {
+      $this->access_token = NULL;
+      $this->refresh_token = NULL;
+      $this->next_refresh = NULL;
+    }
+    else
+    {
+      $this->setupGrant($grant);
+    }
     $this->client = $client;
     $this->clock_func = 'time';
   }
@@ -64,6 +71,14 @@ class Authenticator {
   public function refresh()
   {
     $response = $this->client->refreshAccessToken($this->refresh_token)->run();
+    self::validate_oauth2_response($response);
+    $grant = $response['body'];
+    $this->setupGrant($grant);
+  }
+
+  public function authorizationCode($code)
+  {
+    $response = $this->client->authorizationCode($code)->run();
     self::validate_oauth2_response($response);
     $grant = $response['body'];
     $this->setupGrant($grant);
