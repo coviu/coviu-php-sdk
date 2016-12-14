@@ -27,8 +27,17 @@ class Coviu
 
   public function authorizationCode($code)
   {
-    $this->authenticator->authorizationCode($code);
-    return $this->authenticator;
+    return $this->authenticator->authorizationCode($code);
+  }
+
+  public function getGrant()
+  {
+    return $this->authenticator->getGrant();
+  }
+
+  public function setGrant($grant)
+  {
+    return $this->authenticator->setGrant($grant);
   }
 }
 

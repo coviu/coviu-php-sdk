@@ -22,7 +22,7 @@ class Authenticator {
     }
     else
     {
-      $this->setupGrant($grant);
+      $this->setGrant($grant);
     }
     $this->client = $client;
     $this->clock_func = 'time';
@@ -65,7 +65,23 @@ class Authenticator {
   {
     $this->access_token = $grant['access_token'];
     $this->refresh_token = $grant['refresh_token'];
-    $this->next_refresh = $this->clock() + ($grant['expires_in'] / 2);
+    $this->next_refresh = $this->refreshTime($grant['expires_in']);
+  }
+
+  public function setGrant($grant)
+  {
+    $this->access_token = $grant['access_token'];
+    $this->refresh_token = $grant['refresh_token'];
+    $this->next_refresh = $grant['next_refresh'];
+  }
+
+  public function getGrant()
+  {
+    return [
+      'access_token' => $this->access_token,
+      'refresh_token' => $this->refresh_token,
+      'next_refresh' => $this->next_refresh
+    ];
   }
 
   public function refresh()
@@ -81,7 +97,16 @@ class Authenticator {
     $response = $this->client->authorizationCode($code)->run();
     self::validate_oauth2_response($response);
     $grant = $response['body'];
-    $this->setupGrant($grant);
+    return [
+      'access_token' => $grant['access_token'],
+      'refresh_token' => $grant['refresh_token'],
+      'next_refresh' => $this->refreshTime($grant['expires_in'])
+    ];
+  }
+
+  public function refreshTime($expires_in)
+  {
+    return $this->clock() + ($expires_in / 2);
   }
 
   public function setClock($f)
