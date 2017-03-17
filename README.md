@@ -22,7 +22,9 @@ coviu-php-sdk exposes this functionality through a convenient php library.
 composer require coviu/Api
 ```
 
-If you are not using composer in your application, still run the above command, which creates a `vendor` directory. Then commit the vendor directory into your codebase. You can get `composer` from https://getcomposer.org/download/ .
+If you are not using composer in your application, still run the above command, which creates a `vendor` directory. Then commit the vendor directory into your codebase. You can get `composer` from https://getcomposer.org/download/ . You can check Coviu's composer package at https://packagist.org/packages/coviu/coviu-sdk .
+
+If you'd like to get a full tarball with the vendor directory, contact support@coviu.com .
 
 ### Quickstart
 
