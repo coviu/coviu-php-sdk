@@ -19,7 +19,7 @@ class UserApi
   }
 
   /*
-   * Get the team associted with the authorized used.
+   * Get the team associated with the authorized used.
    */
   public function getAuthorizedTeam ()
   {

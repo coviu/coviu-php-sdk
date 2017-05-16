@@ -191,6 +191,9 @@ $grant = $client->authorizationCode($code);
 // Now create a client that acts on behalf of the user
 $client2 = new Coviu($api_key, $key_secret, $grant);
 
+// Get the team the user authorized you to access
+$res2 = $client2->user-getAuthorizedTeam();
+
 // Get that user's scheduled sessions
 $res = $client2->sessions->getSessions();
 ```
