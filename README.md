@@ -15,11 +15,13 @@ or if they are required the be _let in_ by an existing participant.
 
 coviu-php-sdk exposes this functionality through a convenient php library.
 
+There is a demo for how to use the SDK at https://github.com/coviu/coviu-api-php-demo . Also check out the Wordpress plugin at https://github.com/coviu/coviu-video-calls which has a more detailed use.
+
 
 ### Installation
 
 ```bash
-composer require coviu/Api
+composer require coviu/coviu-sdk
 ```
 
 If you are not using composer in your application, still run the above command, which creates a `vendor` directory. Then commit the vendor directory into your codebase. You can get `composer` from https://getcomposer.org/download/ . You can check Coviu's composer package at https://packagist.org/packages/coviu/coviu-sdk .
